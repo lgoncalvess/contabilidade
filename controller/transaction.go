@@ -23,7 +23,7 @@ func BuscarTransacoes(w http.ResponseWriter, r *http.Request) {
 	var transactions []models.Transaction
 	for rows.Next() {
 		var trs models.Transaction
-		if err = rows.Scan(&trs.ID, &trs.Name, &trs.Value, &trs.Data, &trs.Type, &trs.Conta_ID); err != nil {
+		if err = rows.Scan(&trs.ID, &trs.Name, &trs.Value, &trs.Date, &trs.Type, &trs.Conta_ID); err != nil {
 			log.Fatal(err)
 		}
 		transactions = append(transactions, trs)
@@ -52,14 +52,14 @@ func BuscarTransacoesFromDate(w http.ResponseWriter, r *http.Request) {
 		log.Fatal(err)
 	}
 	defer db.Close()
-	rows, err := db.Query("SELECT * FROM transaction WHERE data >= $1 AND data <= $2 AND conta_id = $3", data["dataInicio"], data["dataFim"], data["contaId"])
+	rows, err := db.Query("SELECT * FROM transaction WHERE date >= $1 AND date <= $2 AND conta_id = $3", data["dataInicio"], data["dataFim"], data["contaId"])
 	if err != nil {
 		log.Fatal(err)
 	}
 	var transactions []models.Transaction
 	for rows.Next() {
 		var trs models.Transaction
-		if err = rows.Scan(&trs.ID, &trs.Name, &trs.Value, &trs.Data, &trs.Type, &trs.Conta_ID); err != nil {
+		if err = rows.Scan(&trs.ID, &trs.Name, &trs.Value, &trs.Date, &trs.Type, &trs.Conta_ID); err != nil {
 			log.Fatal(err)
 		}
 		transactions = append(transactions, trs)
@@ -88,7 +88,7 @@ func InserirTransacao(w http.ResponseWriter, r *http.Request) {
 	}
 	defer db.Close()
 
-	result, err := db.Exec("insert into transaction(name,value,data,type,conta_id) values($1,$2,$3,$4,$5)", transaction.Name, transaction.Value, transaction.Data, transaction.Type, transaction.Conta_ID)
+	result, err := db.Exec("insert into transaction(name,value,date,type,conta_id) values($1,$2,$3,$4,$5)", transaction.Name, transaction.Value, transaction.Date, transaction.Type, transaction.Conta_ID)
 	if err != nil {
 		log.Fatal(err)
 	}
