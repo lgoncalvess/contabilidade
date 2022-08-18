@@ -11,6 +11,7 @@ import (
 func Run() {
 	r := mux.NewRouter()
 
+	r.HandleFunc("/", controller.RenderTemplate).Methods(http.MethodGet)
 	r.HandleFunc("/contas", controller.BuscarContas).Methods(http.MethodGet)
 	r.HandleFunc("/contas", controller.InserirConta).Methods(http.MethodPost)
 	r.HandleFunc("/contas", controller.EditarConta).Methods(http.MethodPut)

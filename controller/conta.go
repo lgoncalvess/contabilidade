@@ -104,7 +104,9 @@ func BuscarContas(w http.ResponseWriter, r *http.Request) {
 		log.Fatal(err)
 	}
 	defer db.Close()
-	rows, err := db.Query("SELECT * FROM conta")
+
+	rows, err := db.Query("select * from conta")
+
 	if err != nil {
 		log.Fatal(err)
 	}

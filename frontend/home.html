@@ -1,0 +1,175 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Wallet</title>
+    <style>
+        body {
+            margin: 0;
+        }
+
+        .buttons {
+            display: flex;
+            flex-direction: row;
+            position: fixed;
+            justify-content: center;
+            bottom: 0;
+            width: 100%;
+        }
+
+        .button {
+            font-size: larger;
+            border: none;
+            border-top: 2px solid black;
+            background-color: #FFFFFF;
+            width: 100px;
+            height: 40px;
+            margin: 0 10px;
+        }
+
+        .container {
+            height: 100vh;
+            width: 100vw;
+            display: none;
+            justify-content: center;
+            align-items: center;
+        }
+
+
+        .modal {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 70vh;
+            width: 90vw;
+            background: #FFFFFF;
+            /* Gray 1 */
+            border: 3px solid #333333;
+            box-shadow: -4px 4px 0px #000000;
+        }
+
+        .modal form{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .modal form div {
+            margin: 30px 0;
+            border: 2px solid #333333;
+            padding: 20px;
+        }
+
+        input {
+            border:none;
+            border-left: 2px solid #333333;
+            width: 50vw;
+            padding-left: 10px;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="buttons">
+        <button class="button" id="plus-btn" onclick="showTransactionContainer(this.id)">+</button>
+        <button class="button" id="less-btn" onclick="showTransactionContainer(this.id)">-</button>
+        <button class="button" >tag</button>
+    </div>
+    
+    <div class="container transaction-container">
+        <div class="modal">
+            <form id="transaction-form">
+
+                <div>
+                    <label for="name">name:</label>
+                    <input id="name" name="name" placeholder="transanction name" type="text">
+                </div>
+
+                <div>
+                    <label for="date">date:</label>
+                    <input type="date" id="date" name="date" placeholder="date">
+                </div>
+
+                <div>
+                    <label for="value">value:</label>
+                    <input type="number" id="value" name="value" placeholder="transaction value">
+                </div>
+
+                <input class="button" type="submit" value="Submit" onclick="doTransaction()">
+            </form>
+        </div>
+    </div>
+
+</body>
+<script>
+
+    function showTransactionContainer(id) {
+        let el = document.querySelector(".transaction-container");
+        el.style.display="flex";
+
+        if(id === `plus-btn`) {
+            el.classList.add('plus')
+            el.classList.remove('less')
+        } else {
+            el.classList.remove('plus')
+            el.classList.add('less')
+        }
+    }
+
+    function doTransaction() {
+        event.preventDefault();
+        
+        let name = document.querySelector('#name').value
+        let date = document.querySelector('#date').value
+        let value = document.querySelector('#value').value
+        let type = document.querySelector('.plus') != null ? 'plus' : 'less';
+
+        const body = {
+            name:name,
+            value:parseFloat(value),
+            date:date,
+            type: type,
+            conta_id: 4,
+        }
+
+        console.log(body)
+        console.log(JSON.stringify(body))
+
+        doPost('/transacoes',JSON.stringify(body))
+        doGet('/transacoes')
+    }
+
+    function doGet(endpoint) {
+        fetch(endpoint)
+        .then((resp)=>{
+                console.log(resp.json())
+        })
+        .catch(resp => {
+            console.log(resp)
+        })
+    }
+
+    function doPost(endpoint,body) {
+
+        const options = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: body,
+        };
+
+        fetch(endpoint, options)
+        .then((resp)=>{
+            console.log(resp.json())
+        })
+        .catch(resp => {
+            console.log(resp)
+        })
+    }
+
+
+</script>
+</html>

@@ -16,7 +16,7 @@ func BuscarTransacoes(w http.ResponseWriter, r *http.Request) {
 		log.Fatal(err)
 	}
 	defer db.Close()
-	rows, err := db.Query("SELECT * FROM transaction")
+	rows, err := db.Query("SELECT id,name,value,date,type,conta_id FROM transaction")
 	if err != nil {
 		log.Fatal(err)
 	}
